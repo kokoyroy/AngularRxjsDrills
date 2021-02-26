@@ -39,16 +39,30 @@ export class HomeComponent implements OnInit {
         //**************reactive way */
         const http$ = createHttpObservable('/api/courses');
 
-        this.beginnersCourses$ = http$.pipe(
-            map((coutsesArray: Course[]) => [...coutsesArray["payload"]]
-                .filter(course => course.category === "BEGINNER")
-            )
-        )
-        this.advancedCourses$ = http$.pipe(
-            map((coursesArray: Course[]) => [...coursesArray["payload"]]
-                .filter(course => course.category === "ADVANCED"))
+
+        const courses$ = http$.pipe(
+            map(courses => [...courses['payload']])
         )
 
+        this.beginnersCourses$ = courses$.pipe(
+            map((courses: any[]) => courses.filter(course => course.category === 'BEGINNER')
+            )
+        )
+        this.advancedCourses$ = courses$.pipe(
+            map((courses: any[]) => courses.filter(course => course.category === 'ADVANCED')
+            )
+        )
+
+
+        // this.beginnersCourses$ = http$.pipe(
+        //     map((coursesObj) => [...coursesObj["payload"]]
+        //         .filter(course => course.category === "BEGINNER"))
+        // )
+        // this.advancedCourses$ = http$.pipe(
+        //     map((coursesObj) => [...coursesObj["payload"]]
+        //         .filter(course => course.category === "ADVANCED"))
+        // )
+        // the subscribe happens in the html by angular
 
     }
 
