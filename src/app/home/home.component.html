@@ -1,4 +1,3 @@
-
 <div class="courses-panel">
 
     <h3>All Courses</h3>
@@ -6,20 +5,22 @@
     <mat-tab-group>
 
         <mat-tab label="Beginners">
-
-            <courses-card-list
-                    [courses]="beginnersCourses">
+            <!-- with the async pipe angular subscribes to the observable and retrieves the values and also handles the unsubscribe -->
+            <courses-card-list [courses]="beginnersCourses$ | async">
+                <!-- the commented imperative way below -->
+                <!-- <courses-card-list [courses]="beginnersCourses"> -->
 
             </courses-card-list>
 
         </mat-tab>
 
         <mat-tab label="Advanced">
+            <!-- with the async pipe angular subscribes to the observable and retrieves the values and also handles the unsubscribe -->
+            <courses-card-list [courses]="advancedCourses$ | async">
+                <!-- the commented imperative way bellow -->
+                <!-- <courses-card-list [courses]="advancedCourses"> -->
 
-            <courses-card-list
-                    [courses]="advancedCourses"
-
-            ></courses-card-list>
+            </courses-card-list>
 
         </mat-tab>
 
@@ -28,4 +29,3 @@
 
 
 </div>
-

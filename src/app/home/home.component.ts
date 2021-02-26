@@ -11,27 +11,43 @@ import { createHttpObservable } from '../common/util';
     styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-    beginnersCourses: Course[]
-    advancedCourses: Course[]
+    // beginnersCourses: Course[]
+    // advancedCourses: Course[]
+
+    beginnersCourses$: Observable<Course[]>
+    advancedCourses$: Observable<Course[]>
 
     constructor() {
 
     }
 
     ngOnInit() {
-        const http$ = createHttpObservable('/api/courses')
+        //*****************imperative way
+        // const http$ = createHttpObservable('/api/courses')
 
-        const courses$ = http$.pipe(
-            // map(course => Object.values(course['payload']))
-            map(course => [...course['payload']])
+        // const courses$ = http$.pipe(
+        //     // map(course => Object.values(course['payload']))
+        //     map(course => [...course['payload']])
+        // )
+
+
+        // courses$.subscribe(coursesArray => {
+        //     // console.log(coursesArray)
+        //     this.beginnersCourses = coursesArray.filter(el => el.category === "BEGINNER")
+        //     this.advancedCourses = coursesArray.filter(el => el.category === "ADVANCED")
+        // })
+        //**************reactive way */
+        const http$ = createHttpObservable('/api/courses');
+
+        this.beginnersCourses$ = http$.pipe(
+            map((coutsesArray: Course[]) => [...coutsesArray["payload"]]
+                .filter(course => course.category === "BEGINNER")
+            )
         )
-
-
-        courses$.subscribe(coursesArray => {
-            // console.log(coursesArray)
-            this.beginnersCourses = coursesArray.filter(el => el.category === "BEGINNER")
-            this.advancedCourses = coursesArray.filter(el => el.category === "ADVANCED")
-        })
+        this.advancedCourses$ = http$.pipe(
+            map((coursesArray: Course[]) => [...coursesArray["payload"]]
+                .filter(course => course.category === "ADVANCED"))
+        )
 
 
     }
