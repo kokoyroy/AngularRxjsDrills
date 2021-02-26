@@ -36,24 +36,30 @@ export class HomeComponent implements OnInit {
         //     this.beginnersCourses = coursesArray.filter(el => el.category === "BEGINNER")
         //     this.advancedCourses = coursesArray.filter(el => el.category === "ADVANCED")
         // })
+
+
         //**************reactive way */
         const http$ = createHttpObservable('/api/courses');
 
 
-        const courses$ = http$.pipe(
-            map(courses => [...courses['payload']])
+        const courses$: Observable<Course[]> = http$.pipe(
+            // tap makes side effects but returns output identical to the source 
+            tap(() => console.log('http request executed')),
+            map(courses => [...courses['payload']]),
+            // shareReplay stops the multiple http calls caused by multiple subscriptions to the same stream
+            shareReplay()
         )
 
         this.beginnersCourses$ = courses$.pipe(
-            map((courses: any[]) => courses.filter(course => course.category === 'BEGINNER')
+            map(courses => courses.filter(course => course.category === 'BEGINNER')
             )
         )
         this.advancedCourses$ = courses$.pipe(
-            map((courses: any[]) => courses.filter(course => course.category === 'ADVANCED')
+            map(courses => courses.filter(course => course.category === 'ADVANCED')
             )
         )
 
-
+        //another way
         // this.beginnersCourses$ = http$.pipe(
         //     map((coursesObj) => [...coursesObj["payload"]]
         //         .filter(course => course.category === "BEGINNER"))
