@@ -1,6 +1,5 @@
-import { DOCUMENT } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { interval, Observable, Observer } from 'rxjs';
+import { interval, noop, Observable, Observer } from 'rxjs';
 
 @Component({
   selector: 'about',
@@ -25,6 +24,13 @@ export class AboutComponent implements OnInit {
         })
         .catch(err => observer.error(err))
     })
+
+    http$.subscribe(
+      data => console.log(data),
+      noop,
+      () => console.log('completed')
+    )
+
   }
 
 
