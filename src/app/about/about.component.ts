@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { interval, noop, Observable, Observer } from 'rxjs';
+import { noop } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { createHttpObservable } from '../common/util';
 
 @Component({
   selector: 'about',
@@ -11,19 +13,19 @@ export class AboutComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    const http$ = createHttpObservable('/api/courses')
+    
+    
+    
+    const courses$ = http$.pipe(
+      map(course =>Object.values(course['payload']))
+    ) 
 
 
-
-
-    const http$ = new Observable(observer => {
-      fetch('/api/courses')
-        .then(res => res.json())
-        .then(data => {
-          observer.next(data)
-          observer.complete()
-        })
-        .catch(err => observer.error(err))
-    })
+courses$.subscribe((params) => {
+  console.log(params)
+  
+})
 
     http$.subscribe(
       data => console.log(data),
@@ -32,9 +34,5 @@ export class AboutComponent implements OnInit {
     )
 
   }
-
-
-
-
 
 }
